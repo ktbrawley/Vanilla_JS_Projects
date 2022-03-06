@@ -1,3 +1,5 @@
+"use strict";
+
 const form = document.querySelector('#form');
 const username = document.querySelector('#username');
 const email = document.querySelector('#email');
@@ -14,18 +16,22 @@ function showError(input, msg) {
     small.innerText = msg;
 }
 
-// Check email is valid
-function isValidEmail(email) {
-    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-    return re.test(String(email).toLowerCase());
-}
-
 // Show input success message
 function showSuccess(input) {
     const formControl = input.parentElement;
     formControl.classList.remove('error');
     formControl.classList.add('success');
+}
+
+// Check input length
+function checkLength(input, min, max) {
+    if (input.value.length < min) {
+        showError(input, `${getFieldName(input)} must be at least ${min} characters`);
+    } else if (input.value.length > max) {
+        showError(input, `${getFieldName(input)} must be less than ${max} characters`);
+    } else {
+        showSuccess(input);
+    }
 }
 
 // Check required fields
@@ -40,6 +46,26 @@ function checkRequired(inputArr) {
     });
 }
 
+// Check email is valid
+function checkEmail(input) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    if (!re.test(String(input.value).toLowerCase())) {
+        showError(input, 'Email address is not valid');
+    } else {
+        showSuccess(input);
+    }
+}
+
+// Check password is valid
+function checkPassword(input, confirmInput) {
+    if (input.value != confirmInput.value) {
+        showError(confirmInput, 'Password does not match');
+    } else {
+        showSuccess(confirmInput);
+    }
+}
+
 // Return the name of the input field
 function getFieldName(input) {
     var typeStr = String(input.type);
@@ -51,4 +77,8 @@ form.addEventListener('submit', function (e) {
     e.preventDefault();
 
     checkRequired([username, email, password, password2]);
+    checkLength(username, 3, 15);
+    checkLength(password, 6, 25);
+    checkEmail(email);
+    checkPassword(password, password2);
 });
