@@ -50,16 +50,16 @@ function checkRequired(inputArr) {
 function checkEmail(input) {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    if (!re.test(String(input.value).toLowerCase())) {
+    if (!re.test(String(input.value.trim()).toLowerCase())) {
         showError(input, 'Email address is not valid');
     } else {
         showSuccess(input);
     }
 }
 
-// Check password is valid
-function checkPassword(input, confirmInput) {
-    if (input.value != confirmInput.value) {
+// Check passwords match
+function checkPasswordsMatch(input, confirmInput) {
+    if (input.value !== confirmInput.value) {
         showError(confirmInput, 'Password does not match');
     } else {
         showSuccess(confirmInput);
