@@ -28,33 +28,27 @@ function showSuccess(input) {
     formControl.classList.add('success');
 }
 
+// Check required fields
+function checkRequired(inputArr) {
+    inputArr.forEach((input) => {
+        console.log(input);
+        if (input.value.trim() === '') {
+            showError(input, `${getFieldName(input)} is required`)
+        } else {
+            showSuccess(input);
+        }
+    });
+}
+
+// Return the name of the input field
+function getFieldName(input) {
+    var typeStr = String(input.type);
+    return typeStr[0].toUpperCase() + typeStr.slice(1);
+}
+
 // Event Listeners
 form.addEventListener('submit', function (e) {
     e.preventDefault();
 
-    if (username.value === '') {
-        showError(username, 'Username is required');
-    } else {
-        showSuccess(username);
-    }
-
-    if (email.value === '') {
-        showError(email, 'email is required');
-    } else if (!isValidEmail(email.value)) {
-        showError(email, 'email is not valid');
-    } else {
-        showSuccess(email);
-    }
-
-    if (password.value === '') {
-        showError(password, 'password is required');
-    } else {
-        showSuccess(password);
-    }
-
-    if (password2.value !== password.value || password2.value === '') {
-        showError(password2, 'passwords do not match');
-    } else {
-        showSuccess(password2);
-    }
+    checkRequired([username, email, password, password2]);
 });
