@@ -10,6 +10,11 @@ const ticketPrice = +movieSelect.value;
 function updateSelectedCount() {
   const selectedSeats = document.querySelectorAll('.row .seat.selected');
 
+  const seatsIndex = [...selectedSeats]
+    .map((seat) => [...seats].indexOf(seat));
+
+  localStorage.setItem('selectedSeats', JSON.stringify(seatsIndex));
+
   if (selectedSeats) {
     const seats = selectedSeats.length;
     count.innerHTML = seats;
@@ -30,3 +35,17 @@ container.addEventListener('click', (e) => {
 movieSelect.addEventListener('change', (e) => {
   updateSelectedCount();
 });
+
+window.onload = function (e) {
+  var selectedSeatIndices = [...JSON.parse(localStorage.getItem('selectedSeats'))];
+  console.log(selectedSeatIndices);
+
+  var seatArr = [...seats];
+  seatArr.forEach((seat) => {
+    var index = seatArr.indexOf(seat);
+    if (selectedSeatIndices.includes(index)) {
+      seats[index].classList.add('selected');
+      updateSelectedCount();
+    }
+  })
+};
